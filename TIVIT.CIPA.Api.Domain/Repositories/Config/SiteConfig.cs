@@ -32,6 +32,11 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
             builder.HasOne(s => s.Company)
                 .WithOne(c => c.Site)
                 .HasForeignKey<Site>(s => s.CompanyId);
+
+            builder.HasMany(s => s.Candidates)
+                   .WithOne(c => c.Site)
+                   .HasForeignKey(c => c.SiteId)
+                   .HasConstraintName("FK_Site_Candidate");
         }
     }
 }

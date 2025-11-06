@@ -25,7 +25,7 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
                    .HasMaxLength(100);
 
             builder.Property(c => c.SiteName)
-                   .HasColumnName("Site")
+                   .HasColumnName("SiteName")
                    .HasMaxLength(100);
 
             builder.Property(c => c.CorporateId)

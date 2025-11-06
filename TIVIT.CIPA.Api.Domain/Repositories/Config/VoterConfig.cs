@@ -35,7 +35,7 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
             builder.Property(v => v.ContactEmail)
                    .HasMaxLength(150);
 
-            builder.Property(v => v.CorportatePhone)
+            builder.Property(v => v.CorporatePhone)
                    .HasMaxLength(20);
 
             builder.Property(v => v.ContactPhone)

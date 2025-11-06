@@ -1,6 +1,7 @@
 ﻿#if !DEBUG
 using Microsoft.AspNetCore.Authorization;
 #endif
+using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.AspNetCore.Mvc;
 using TIVIT.CIPA.Api.Attributes;
 using TIVIT.CIPA.Api.Domain.Interfaces.Business;
@@ -62,13 +63,14 @@ namespace TIVIT.CIPA.Api.Controllers
         [Action("adm_candidato", "consultar_candidato")]
 #endif
         public async Task<ActionResult<IEnumerable<CandidateResumeResponse>>> SearchCandidateAsync(
-            [FromQuery] int? electionId,
+            [FromQuery] int electionId,
             [FromQuery] string name,
-            [FromQuery] bool? isActive,
+            [FromQuery] string? corporateid,
+            [FromQuery] string? area,
             [FromQuery] int? siteId
             )
         {
-            var response = await business.SearchCandidateAsync(name, electionId, isActive, siteId);
+            var response = await business.SearchCandidateAsync(name, electionId, siteId, corporateid, area);
 
             if (response.HasErrors)
                 return BadRequest(response.Messages);

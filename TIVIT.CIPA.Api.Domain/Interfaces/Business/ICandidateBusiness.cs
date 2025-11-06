@@ -8,7 +8,7 @@ namespace TIVIT.CIPA.Api.Domain.Interfaces.Business
     {
         Task<Response<CandidateDetailResponse>> GetByIdAsync(int id);
         Task<Response<IEnumerable<CandidateDetailResponse>>> GetByElectionIdAsync(int electionId);
-        Task<Response<IEnumerable<CandidateResumeResponse>>> SearchCandidateAsync(string name, int? electionId, bool? isActive, int? siteId);
+        Task<Response<IEnumerable<CandidateResumeResponse>>> SearchCandidateAsync(string name, int electionId, int? siteId = null, string? registry = null, string? departament = null);
         Task<Response<int>> CreateAsync(CandidateCreateRequest createRequest);
         Task<Response> UpdateAsync(int id, CandidateUpdateRequest updateRequest);
         Task<Response> ChangeActiveAsync(bool isActive, int id);

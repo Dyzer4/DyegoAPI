@@ -12,7 +12,7 @@
         public string Email { get; set; }
         public string CorporateEmail { get; set; }
         public string ContactEmail { get; set; }
-        public string CorportatePhone { get; set; }
+        public string CorporatePhone { get; set; }
         public string ContactPhone { get; set; }
         public string Site { get; set; }
         public string Department { get; set; }
