@@ -13,24 +13,14 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
             builder.HasKey(c => c.Id)
                    .HasName("PK_Candidate");
 
-            builder.Property(c => c.Name)
-                   .HasMaxLength(200)
+            builder.Property(c => c.VoterID)
                    .IsRequired();
 
-            builder.Property(c => c.Area)
-                   .HasMaxLength(200)
+            builder.Property(c => c.ElectionId)
                    .IsRequired();
 
-            builder.Property(c => c.Department)
-                   .HasMaxLength(100);
-
-            builder.Property(c => c.SiteName)
-                   .HasColumnName("SiteName")
-                   .HasMaxLength(100);
-
-            builder.Property(c => c.CorporateId)
-                   .HasColumnName("CorporateId")
-                   .HasMaxLength(10);
+            builder.Property(c => c.SiteId)
+                   .IsRequired();
 
             builder.Property(c => c.PhotoBase64)
                    .HasColumnType("VARBINARY(MAX)");

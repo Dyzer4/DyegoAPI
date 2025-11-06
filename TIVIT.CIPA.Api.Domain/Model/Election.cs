@@ -12,8 +12,6 @@ namespace TIVIT.CIPA.Api.Domain.Model
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
-        // Tornado nullable para ficar consistente com o mapeamento (IsRequired(false))
         public DateTime? RegistrationStartDate { get; set; }
         public DateTime? RegistrationEndDate { get; set; }
         public DateTime? ElectionStartDate { get; set; }

@@ -42,19 +42,10 @@ namespace TIVIT.CIPA.Api.Domain.Business
             {
                 Id = candidate.Id,
                 ElectionId = candidate.ElectionId,
-                Name = candidate.Name,
-                Area = candidate.Area,
-                SiteId = candidate.SiteId,
+                Name = candidate.Voter.Name,
+                Department = candidate.Voter.Department,
                 PhotoBase64 = photoBase64,
-                IsActive = candidate.IsActive,
-                Site = candidate.Site != null ? new SiteResponse()
-                {
-                    Id = candidate.Site.Id,
-                    CompanyId = candidate.Site.CompanyId,
-                    ProtheusCode = candidate.Site.ProtheusCode,
-                    IsActive = candidate.Site.IsActive,
-                    Name = candidate.Site.Name
-                } : null
+                IsActive = candidate.IsActive
             };
 
             return response;
@@ -73,19 +64,10 @@ namespace TIVIT.CIPA.Api.Domain.Business
             {
                 Id = x.Id,
                 ElectionId = x.ElectionId,
-                Name = x.Name,
-                Area = x.Area,
-                SiteId = x.SiteId,
-                PhotoBase64 = $"data:{x.PhotoMimeType};base64,{Convert.ToBase64String(x.PhotoBase64)}",
+                Name = x.Voter.Name,
+                Department = x.Voter.Department,
                 IsActive = x.IsActive,
-                Site = x.Site != null ? new SiteResponse()
-                {
-                    Id = x.Site.Id,
-                    CompanyId = x.Site.CompanyId,
-                    ProtheusCode = x.Site.ProtheusCode,
-                    IsActive = x.Site.IsActive,
-                    Name = x.Site.Name
-                } : null
+                
             });
 
             return response;
@@ -104,9 +86,9 @@ namespace TIVIT.CIPA.Api.Domain.Business
             {
                 Id = x.Id,
                 ElectionId = x.ElectionId,
-                CorporateId = x.CorporateId,
-                Name = x.Name,
-                Department = x.Department,
+                Site = x.Site.Name,
+                Name = x.Voter.Name,
+                Department = x.Voter.Department,
                 IsActive = x.IsActive
             });
 
@@ -155,13 +137,12 @@ namespace TIVIT.CIPA.Api.Domain.Business
                 return response;
             }
 
-            var candiate = new Candidate()
+            var candidate = new Candidate()
             {
                 ElectionId = createRequest.ElectionId,
-                CorporateId = createRequest.CorporateId,
-                Name = createRequest.Name,
-                Area = createRequest.Area,
                 SiteId = createRequest.SiteId,
+                CorporateId = createRequest.CorporateId,
+                VoterID = Voter.VoterId,
                 PhotoBase64 = photoBytes,
                 PhotoMimeType = mimeType,
                 IsActive = true,
@@ -169,9 +150,9 @@ namespace TIVIT.CIPA.Api.Domain.Business
                 CreateUser = _userInfo.Upn
             };
 
-            await _candidateRepository.CreateAsync(candiate);
+            await _candidateRepository.CreateAsync(candidate);
 
-            response.Data = candiate.Id;
+            response.Data = candidate.Id;
 
             return response;
         }
@@ -221,10 +202,8 @@ namespace TIVIT.CIPA.Api.Domain.Business
             var candidate = await this._candidateRepository.GetByIdAsync(id);
 
             candidate.ElectionId = updateRequest.ElectionId;
-            candidate.CorporateId = updateRequest.CorporateId;
-            candidate.Name = updateRequest.Name;
-            candidate.Area = updateRequest.Area;
             candidate.SiteId = updateRequest.SiteId;
+            candidate.VoterID = updateRequest.VoterId;
             candidate.PhotoBase64 = photoBytes;
             candidate.PhotoMimeType = mimeType;
             candidate.UpdateDate = DateTime.Now;

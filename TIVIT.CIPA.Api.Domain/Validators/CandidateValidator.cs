@@ -32,7 +32,6 @@ namespace TIVIT.CIPA.Api.Domain.Validators
             AddNotifications(new Contract<CandidateCreateRequest>()
                 .Requires()
 
-                .IsNotNullOrWhiteSpace(request.Name, "Name", "Nome do candidato é obrigatório")
                 .IsNotNullOrWhiteSpace(request.CorporateId, "CorporateId", "Matricula é obrigatório")
                 .IsGreaterThan(request.ElectionId, 0, "ElectionId", "ElectionId inválido")
                 .IsNotNullOrWhiteSpace(request.PhotoBase64, "Foto", "Foto do candidato é obrigatório")
