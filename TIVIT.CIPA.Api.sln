@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIVIT.CIPA.Api", "TIVIT.CIPA.Api\TIVIT.CIPA.Api.csproj", "{B476563D-889F-46ED-9AB2-C98C0B72B7D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIVIT.CIPA.Api.Domain", "TIVIT.CIPA.Api.Domain\TIVIT.CIPA.Api.Domain.csproj", "{244A99A2-35CB-44CA-A559-E189D2D26AA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B476563D-889F-46ED-9AB2-C98C0B72B7D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B476563D-889F-46ED-9AB2-C98C0B72B7D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B476563D-889F-46ED-9AB2-C98C0B72B7D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B476563D-889F-46ED-9AB2-C98C0B72B7D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{244A99A2-35CB-44CA-A559-E189D2D26AA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{244A99A2-35CB-44CA-A559-E189D2D26AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{244A99A2-35CB-44CA-A559-E189D2D26AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{244A99A2-35CB-44CA-A559-E189D2D26AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE825341-CB4F-4A27-ACB8-BD58282136C4}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,631 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+        #outlook a {
+            padding: 0;
+        }
+
+        .ReadMsgBody {
+            width: 100%;
+        }
+
+        .ExternalClass {
+            width: 100%;
+        }
+
+            .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+                line-height: 120%;
+            }
+
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            -ms-interpolation-mode: bicubic;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        table {
+            border-collapse: collapse !important;
+        }
+
+        body, #bodyTable, #bodyCell {
+            height: 100% !important;
+            margin: 0;
+            padding: 0;
+            width: 100% !important;
+        }
+
+        #bodyCell {
+            padding: 40px;
+        }
+
+        #templateContainer {
+            width: 600px;
+            background-color: #FFFFFF;
+        }
+
+        body, #bodyTable {
+            background-color: #F7F7F7;
+        }
+
+        #templateContainer {
+            border: 1px solid #D9D9D9;
+            box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.10);
+        }
+
+        #templatePreheader {
+            background-color: #FFFFFF;
+        }
+
+        #templateHeader {
+            background-color: #FFFFFF;
+            border-top: 1px solid #FFFFFF;
+            border-bottom: 1px solid #FFFFFF;
+        }
+
+        #headerImage {
+            height: auto;
+            max-width: 600px;
+        }
+
+        #templateBody {
+            background-color: #FFFFFF;
+        }
+
+        #templateFooter {
+            background-color: #FFFFFF;
+        }
+
+        h1, h2, h3, h4 {
+            display: block;
+            font-family: Helvetica, Arial, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            line-height: 100%;
+            letter-spacing: normal;
+            margin-top: 0;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #202020 !important;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        h2 {
+            color: #404040 !important;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        h3 {
+            color: #606060 !important;
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        h4 {
+            color: #808080 !important;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        td {
+            font-family: Helvetica, Arial, sans-serif;
+            line-height: 160%;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+            ul li {
+                text-align: left;
+                padding-bottom: 8px;
+            }
+
+        .subtitle {
+            color: #d7172f !important;
+            text-transform: uppercase;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 140%;
+        }
+
+        .calltoaction {
+            text-transform: uppercase;
+            font-size: 14px;
+            padding: 16px;
+            border: 1px solid #d7172f;
+            border-radius: 5px;
+            color: #d7172f;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+            margin: 0 auto;
+            width: 80%;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+            .calltoaction.small {
+                font-size: 10px;
+                padding: 8px;
+            }
+
+        .feature-icon {
+            padding-bottom: 16px;
+        }
+
+        .sub {
+            font-size: 13px;
+            color: #555;
+        }
+
+        .huge-txt {
+            font-size: 28px;
+        }
+
+        .highlight {
+            color: #d7172f !important;
+            font-weight: 600 !important;
+        }
+
+        .txt-block {
+            width: 130px;
+            display: inline-block;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 10px;
+            border: 1px solid #d7172f;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .superHighlight {
+            color: #d7172f !important;
+            font-weight: 400 !important;
+            font-size: 22px;
+        }
+
+        .greenHighlight {
+            color: #76BF26 !important;
+            font-weight: 600 !important;
+        }
+
+        .purple {
+            color: #d7172f !important;
+        }
+
+        .green {
+            color: #76BF26 !important;
+        }
+
+        .blue {
+            color: #00BCC9 !important;
+        }
+
+        .red {
+            color: #E5615C !important;
+        }
+
+        .warning {
+            color: #C93648;
+        }
+
+        .shortDivider {
+            margin-right: auto;
+            margin-left: auto;
+            width: 30px;
+            border: 0;
+            border-top: 1px solid #DDD;
+        }
+
+        .sectionDivider {
+            width: 80%;
+            border: 0;
+            border-top: 1px solid #DDD;
+        }
+
+        .spaceS {
+            padding-bottom: 8px !important;
+        }
+
+        .spaceM {
+            padding-bottom: 16px !important;
+        }
+
+        .spaceL {
+            padding-bottom: 24px !important;
+        }
+
+        .spaceXL {
+            padding-bottom: 40px !important;
+        }
+
+        .closing {
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        .obs {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .preheaderContent {
+            color: #808080;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            line-height: 125%;
+            text-align: left;
+        }
+
+            .preheaderContent a:link, .preheaderContent a:visited, .preheaderContent a .yshortcuts {
+                color: #d7172f;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+        .headerContent {
+            color: #505050;
+            font-family: Helvetica,Arial,sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 100%;
+            padding-top: 0;
+            padding-right: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+            .headerContent a:link, .headerContent a:visited, .headerContent a .yshortcuts {
+                color: #d7172f;
+                font-weight: normal;
+                text-decoration: none;
+            }
+
+        .tivitHeader {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background: #FFF;
+        }
+
+            .tivitHeader img {
+                max-width: 80px;
+                width: 80px;
+            }
+
+        .bodyContent {
+            color: #404040;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 160%;
+            padding-top: 64px;
+            padding-bottom: 40px;
+            padding-right: 72px;
+            padding-left: 72px;
+            background: #FFFFFF;
+        }
+
+        .hidden {
+            color: #FFFFFF;
+            font-size: 0;
+            height: 0;
+        }
+
+        .bodyContent td {
+            padding-bottom: 32px;
+            text-align: center;
+        }
+
+        .bodyContent a:link, .bodyContent a:visited, .bodyContent a .yshortcuts {
+            color: #d7172f;
+            font-weight: bold;
+        }
+
+        .bodyContent img {
+            display: inline;
+            height: auto;
+            max-width: 560px;
+        }
+
+        .footerContent {
+            background: #FFFFFF;
+        }
+
+            .footerContent td {
+                padding-bottom: 16px;
+                text-align: center;
+            }
+
+                .footerContent td p {
+                    color: #666;
+                    font-size: 13px;
+                }
+
+            .footerContent .contact {
+                margin-top: 32px;
+                padding-left: 12%;
+                padding-right: 12%;
+            }
+
+                .footerContent .contact a:link {
+                    text-decoration: underline;
+                }
+
+            .footerContent td.shortDivider {
+                padding-bottom: 8px;
+            }
+
+            .footerContent a:link, .footerContent a:visited, .footerContent a .yshortcuts, .footerContent a span {
+                color: #d7172f;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            .footerContent .social {
+                background: #82269E;
+                padding: 24px 0 18px;
+            }
+
+        .ouvidoria {
+            padding: 32px 12%;
+        }
+
+        .ouvidoria {
+            color: #666;
+            font-size: 13px;
+            text-align: center;
+        }
+
+            .ouvidoria a:link {
+                color: #d7172f;
+                font-weight: bold;
+                text-decoration: underline;
+            }
+
+        .sectionHowto td {
+            padding-bottom: 40px;
+        }
+
+        .sectionFeatures td {
+            padding-left: 8%;
+            padding-right: 8%;
+        }
+
+        .sectionExtra {
+            font-size: 13px !important;
+        }
+
+            .sectionExtra td {
+                text-align: left;
+            }
+
+            .sectionExtra ul {
+                list-style: disc outside;
+                margin-left: 16px;
+            }
+
+        .inviteCode {
+            font-size: 38px;
+            font-family: "Monaco", "Inconsolata", "Consolas", monospace;
+            color: #d7172f;
+        }
+
+        .subtitle.address {
+            text-transform: capitalize;
+        }
+
+        .realTable {
+            margin: 0 auto;
+        }
+
+            .realTable tr {
+                border: 1px solid #DDD;
+            }
+
+            .realTable td {
+                padding: 14px;
+                text-align: left;
+            }
+
+                .realTable td.right {
+                    text-align: right !important;
+                }
+
+            .realTable + .sub {
+                margin-top: 8px;
+            }
+
+        .left-aligned, .left-aligned th, .left-aligned td {
+            text-align: left !important;
+        }
+
+        .link-list {
+            list-style-type: disc;
+            margin-left: 16px;
+        }
+
+        td.sectionHint {
+            background-color: #f6eff6;
+            padding: 1.5rem;
+        }
+
+        @media only screen and (max-width: 480px) {
+            body, table, td, p, a, li, blockquote {
+                -webkit-text-size-adjust: none !important;
+            }
+
+            body {
+                width: 100% !important;
+                min-width: 100% !important;
+            }
+
+            #bodyCell {
+                padding: 0 !important;
+            }
+
+            #templateContainer {
+                max-width: 600px !important;
+                width: 100% !important;
+                border: none;
+                box-shadow: none;
+            }
+
+            #templatePreheader {
+                display: none !important;
+            }
+
+            #headerImage {
+                height: auto !important;
+                max-width: 600px !important;
+                width: 100% !important;
+            }
+
+            h1 {
+                font-size: 26px !important;
+                line-height: 120% !important;
+            }
+
+            h2 {
+                font-size: 22px !important;
+                line-height: 120% !important;
+            }
+
+            h3 {
+                font-size: 18px !important;
+                line-height: 140% !important;
+            }
+
+            h4 {
+                font-size: 16px !important;
+                line-height: 120% !important;
+            }
+
+            .sectionDivider {
+                width: 90%;
+            }
+
+            .headerContent {
+                font-size: 20px !important;
+                line-height: 125% !important;
+            }
+
+            .tivitHeader {
+                padding-top: 32px;
+                padding-bottom: 32px;
+            }
+
+                .tivitHeader img {
+                    max-width: 60px;
+                }
+
+            .bodyContent {
+                font-size: 18px !important;
+                line-height: 125% !important;
+                padding-top: 48px !important;
+                padding-bottom: 32px !important;
+                padding-left: 24px !important;
+                padding-right: 24px !important;
+            }
+
+            .footerContent {
+                font-size: 14px !important;
+                line-height: 115% !important;
+            }
+
+            .sectionFeatures td {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+    </style>
+</head>
+<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;margin:0;padding:0;height:100% ;width:100% ;background-color:#F7F7F7;">
+    <center>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse ;height:100% ;margin:0;padding:0;width:100% ;background-color:#F7F7F7;">
+            <tr>
+                <td align="center" valign="top" id="bodyCell" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;height:100% ;margin:0;padding:40px;width:100% ;font-family:Helvetica, Arial, sans-serif;line-height:160%;">
+                    <table border="0" cellpadding="0" cellspacing="0" id="templateContainer" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse ;width:600px;background-color:#FFFFFF;border:1px solid #D9D9D9;box-shadow:0px 0px 30px 0px rgba(0,0,0,0.10);">
+                        <tr>
+                            <td align="center" valign="top" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:Helvetica, Arial, sans-serif;line-height:160%;">
+                                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse ;">
+                                    <tr>
+                                        <td align="center" style="padding: 0; background-color: #ffffff;">
+                                            <img src="https://tivitsharedassetsdev.blob.core.windows.net/climate/email/images/header.jpg" alt="TIVIT" width="600"
+                                                 style="display: block; border: 0; outline: none; text-decoration: none; width: 100%; height: auto;" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bodyContent" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:Helvetica, Arial, sans-serif;line-height:160%;color:#404040;font-size:16px;padding-top:44px;padding-bottom:20px;padding-right:52px;padding-left:52px;background:#FFFFFF;">
+
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody" style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse ;background-color:#FFFFFF;">
+                                    <tr>
+                                        <td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:Helvetica, Arial, sans-serif;line-height:160%;padding-bottom:32px;text-align:center;">
+                                            <h2 class="greeting" style="display:block;font-family:Helvetica, Arial, sans-serif;font-style:normal;font-weight:bold;line-height:100%;letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-align:center;color:#404040 ;font-size:20px;">Olá, ##NameUser##.</h2>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:Helvetica, Arial, sans-serif;line-height:160%;padding-bottom:32px;text-align:center;">
+                                            <p style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;margin:0;">Identificamos uma tentativa de login por seu usuário, segue abaixo a contra-senha de autenticação:</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:Helvetica, Arial, sans-serif;line-height:160%;padding-bottom:32px;text-align:center;">
+                                         <p style="color: #00008B; font-weight: bold; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0;">##PasswordCode##</p>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-table-lspace:0pt;mso-table-rspace:0pt;font-family:Helvetica, Arial, sans-serif;line-height:160%;padding-bottom:32px;text-align:center;">
+                                            <p style="-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;margin:0;">Equipe TIVIT.</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </center>
+</body>
+</html>

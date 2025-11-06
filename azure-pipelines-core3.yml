@@ -1,0 +1,30 @@
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(date:yyyyMMdd)$(rev:.r)
+
+trigger:
+- develop
+- main
+- release
+
+variables:
+- name: isMain
+  value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+- name: isDevelop
+  value: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+- name: isRelease
+  value: $[eq(variables['Build.SourceBranch'], 'refs/heads/release')]
+
+resources:
+  repositories:
+    - repository: automation.net7
+      type: git
+      name: SistemasCorporativos/automation.net7
+
+pool:
+  name: Default
+
+stages:
+
+  - stage: Build
+    condition: or(succeeded(), eq(variables.isDevelop, 'true'), eq(variables.isMain, 'true'), eq(variables.isRelease, 'true'))
+    jobs:
+    - template: build_core7.yml@automation.net7
