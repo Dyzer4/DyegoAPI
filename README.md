@@ -1,5 +1,33 @@
 # TIVIT.CIPA.API
 
+Candidate features: 
+- Update Candidate 
+- New Candidate
+- Deactive/active Candidate
+- List active Candidates by election (only actives)
+- Search by filters (name, corporateid, department, siteid) (only actives)
+- Search Candidate by id
+
+Voter features:
+- Search Voter by id
+- List active voters by Election (only actives)
+- Deactive/active Voter
+
+User features:
+- Search user by id
+- Deactive/active User
+
+Site features: 
+- Search Site by id
+- Deactive/active Site
+- List all Sites / only actives
+
+Election features:
+- List all Elections
+- Search Elction by id
+- Deactive/active Election
+- Update Election (DON NOT TRY THAT YET, WAIT FIX!!!!!)
+
 ## Estrutura de pastas
 ```
 TIVIT.CIPA.Api/
@@ -64,4 +92,3 @@ TIVIT.CIPA.Api.Domain/
 │
 └── [.csproj files] - Arquivo de projeto
 ```
-# DyegoAPI
