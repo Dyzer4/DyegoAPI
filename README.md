@@ -2,7 +2,7 @@
 
 Candidate features: 
 - Update Candidate 
-- New Candidate
+- New Candidate + upload img (jpg, jpeg, png)
 - Deactive/active Candidate
 - List active Candidates by election (only actives)
 - Search by filters (name, corporateid, department, siteid) (only actives)
