@@ -16,14 +16,17 @@ namespace TIVIT.CIPA.Api.Domain.Business
         private readonly IUserInfo _userInfo;
         private readonly ICandidateRepository _candidateRepository;
         private readonly IStringLocalizer<SharedResource> _localizer;
+        private readonly IVoterRepository _voterRepository;
 
         public CandidateBusiness(
             IUserInfo userInfo,
             ICandidateRepository candidateRepository,
+            IVoterRepository voterRepository,
             IStringLocalizer<SharedResource> localizer)
         {
             _userInfo = userInfo;
             _candidateRepository = candidateRepository;
+            _voterRepository = voterRepository;
             _localizer = localizer;
         }
 
@@ -66,8 +69,10 @@ namespace TIVIT.CIPA.Api.Domain.Business
                 ElectionId = x.ElectionId,
                 Name = x.Voter.Name,
                 Department = x.Voter.Department,
+                PhotoBase64 = x.PhotoBase64 != null && x.PhotoBase64.Length > 0
+                ? $"data:{x.PhotoMimeType};base64,{Convert.ToBase64String(x.PhotoBase64)}"
+                : null,
                 IsActive = x.IsActive,
-                
             });
 
             return response;
@@ -137,12 +142,19 @@ namespace TIVIT.CIPA.Api.Domain.Business
                 return response;
             }
 
+            var voter = await _voterRepository.GetByCorporateIdAsync(createRequest.CorporateId);
+
+            if (voter == null)
+            {
+                response.AddMessage($"Nenhum eleitor encontrado com CorporateId '{createRequest.CorporateId}'.");
+                return response;
+            }
+
             var candidate = new Candidate()
             {
                 ElectionId = createRequest.ElectionId,
                 SiteId = createRequest.SiteId,
-                CorporateId = createRequest.CorporateId,
-                VoterID = Voter.VoterId,
+                VoterID = voter.Id,
                 PhotoBase64 = photoBytes,
                 PhotoMimeType = mimeType,
                 IsActive = true,
@@ -200,10 +212,11 @@ namespace TIVIT.CIPA.Api.Domain.Business
             }
 
             var candidate = await this._candidateRepository.GetByIdAsync(id);
+            var voter = await _voterRepository.GetByCorporateIdAsync(updateRequest.CorporateId);
 
             candidate.ElectionId = updateRequest.ElectionId;
             candidate.SiteId = updateRequest.SiteId;
-            candidate.VoterID = updateRequest.VoterId;
+            candidate.VoterID = voter.Id;
             candidate.PhotoBase64 = photoBytes;
             candidate.PhotoMimeType = mimeType;
             candidate.UpdateDate = DateTime.Now;

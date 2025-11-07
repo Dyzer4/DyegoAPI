@@ -66,11 +66,11 @@ namespace TIVIT.CIPA.Api.Controllers
             [FromQuery] int electionId,
             [FromQuery] string name,
             [FromQuery] string? corporateid,
-            [FromQuery] string? area,
+            [FromQuery] string? department,
             [FromQuery] int? siteId
             )
         {
-            var response = await business.SearchCandidateAsync(name, electionId, siteId, corporateid, area);
+            var response = await business.SearchCandidateAsync(name, electionId, siteId, corporateid, department);
 
             if (response.HasErrors)
                 return BadRequest(response.Messages);

@@ -17,7 +17,6 @@ namespace TIVIT.CIPA.Api.Domain.Validators
 
         private static readonly string[] AllowedMimeTypes = { "image/jpeg", "image/jpg", "image/png" };
 
-
         public CandidateValidator(
             ICandidateRepository candidateRepository,
             IStringLocalizer<SharedResource> localizer)
@@ -28,7 +27,6 @@ namespace TIVIT.CIPA.Api.Domain.Validators
 
         public void ValidateCreate(CandidateCreateRequest request, byte[] photoBytes, string mimeType)
         {
-
             AddNotifications(new Contract<CandidateCreateRequest>()
                 .Requires()
 
@@ -49,8 +47,6 @@ namespace TIVIT.CIPA.Api.Domain.Validators
             // Valida Base64 e tamanho
             if (photoBytes.Length > MaxImageSizeBytes)
                 AddNotification(nameof(request.PhotoBase64), "A imagem não pode ultrapassar 3 MB.");
-
-
         }
 
         public void ValidateUpdate(int id, CandidateUpdateRequest request, byte[] photoBytes, string mimeType)
@@ -58,7 +54,6 @@ namespace TIVIT.CIPA.Api.Domain.Validators
             AddNotifications(new Contract<CandidateUpdateRequest>()
                 .Requires()
 
-                .IsNotNullOrWhiteSpace(request.Name, "Name", "Nome do candidato é obrigatório")
                 .IsNotNullOrWhiteSpace(request.CorporateId, "CorporateId", "Matricula é obrigatório")
                 .IsGreaterThan(request.ElectionId, 0, "ElectionId", "ElectionId inválido")
                 .IsNotNullOrWhiteSpace(request.PhotoBase64, "Foto", "Foto do candidato é obrigatório")
@@ -76,8 +71,6 @@ namespace TIVIT.CIPA.Api.Domain.Validators
             // Valida Base64 e tamanho
             if (photoBytes.Length > MaxImageSizeBytes)
                 AddNotification(nameof(request.PhotoBase64), "A imagem não pode ultrapassar 3 MB.");
-
-
         }
 
         public void ValidateChangeActive(int id)
@@ -90,7 +83,5 @@ namespace TIVIT.CIPA.Api.Domain.Validators
         }
 
         //public bool ExistsActiveByName(string name, int? ignoreId = null) => _candidateRepository.ExistsActiveByName(name, ignoreId);
-
-
     }
 }

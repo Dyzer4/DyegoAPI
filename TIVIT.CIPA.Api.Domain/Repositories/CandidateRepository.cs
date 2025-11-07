@@ -38,7 +38,7 @@ namespace TIVIT.CIPA.Api.Domain.Repositories
                 .Where(x => x.ElectionId == electionId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Candidate>> SearchAsync(string name, int electionId, int? siteId = null, string? registry = null, string? departament = null)
+        public async Task<IEnumerable<Candidate>> SearchAsync(string name, int electionId, int? siteId = null, string? corporateId = null, string? department = null)
         {
             var query = _dbContext.Candidates
                 .Include(c => c.Voter)
@@ -52,11 +52,11 @@ namespace TIVIT.CIPA.Api.Domain.Repositories
             if (siteId.HasValue)
                 query = query.Where(c => c.SiteId == siteId.Value);
 
-            if (!string.IsNullOrWhiteSpace(registry))
-                query = query.Where(c => c.Voter.Registry == registry);
+            if (!string.IsNullOrWhiteSpace(corporateId))
+                query = query.Where(c => c.Voter.CorporateId == corporateId);
 
-            if (!string.IsNullOrWhiteSpace(departament))
-                query = query.Where(c => c.Voter.Department == departament);
+            if (!string.IsNullOrWhiteSpace(department))
+                query = query.Where(c => c.Voter.Department == department);
 
             return await query.ToListAsync();
         }

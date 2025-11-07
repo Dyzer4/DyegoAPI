@@ -13,10 +13,10 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
             builder.HasKey(c => c.Id)
                    .HasName("PK_Candidate");
 
-            builder.Property(c => c.VoterID)
+            builder.Property(c => c.ElectionId)
                    .IsRequired();
 
-            builder.Property(c => c.ElectionId)
+            builder.Property(c => c.VoterID)
                    .IsRequired();
 
             builder.Property(c => c.SiteId)
@@ -46,8 +46,8 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
                    .HasConstraintName("FK_Candidate_Election");
 
             builder.HasOne(c => c.Voter)
-                   .WithOne(v => v.Candidate)
-                   .HasForeignKey<Candidate>(c => c.VoterID)
+                   .WithMany(v => v.Candidates)
+                   .HasForeignKey(c => c.VoterID)
                    .HasConstraintName("FK_Candidate_Voter");
 
             builder.HasOne(c => c.Site)

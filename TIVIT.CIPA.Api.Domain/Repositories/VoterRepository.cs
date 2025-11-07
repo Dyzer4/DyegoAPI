@@ -28,6 +28,12 @@ namespace TIVIT.CIPA.Api.Domain.Repositories
             return await _dbContext.Voters.FindAsync(id);
         }
 
+        public async Task<Voter?> GetByCorporateIdAsync(string corporateId)
+        {
+            return await _dbContext.Voters
+                .FirstOrDefaultAsync(x => x.CorporateId == corporateId);
+        }
+
         public async Task<IEnumerable<Voter>> GetByElectionIdAsync(int electionId)
         {
             return await _dbContext.Voters.Where(x => x.ElectionId == electionId).ToListAsync();
