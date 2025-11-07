@@ -30,13 +30,24 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
                 .HasDefaultValue(true);
 
             builder.HasOne(s => s.Company)
-                .WithOne(c => c.Site)
-                .HasForeignKey<Site>(s => s.CompanyId);
+                   .WithMany(c => c.Sites)
+                   .HasForeignKey(s => s.CompanyId)
+                   .HasConstraintName("FK_Site_Company");
 
             builder.HasMany(s => s.Candidates)
                    .WithOne(c => c.Site)
                    .HasForeignKey(c => c.SiteId)
                    .HasConstraintName("FK_Site_Candidate");
+
+            builder.HasMany(s => s.Voters)
+                   .WithOne(v => v.Site)
+                   .HasForeignKey(v => v.SiteId)
+                   .HasConstraintName("FK_Site_Voter");
+
+            builder.HasMany(s => s.ElectionSites)
+                   .WithOne(es => es.Site)
+                   .HasForeignKey(es => es.SiteId)
+                   .HasConstraintName("FK_Site_ElectionSite");
         }
     }
 }

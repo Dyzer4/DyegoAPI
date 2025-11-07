@@ -21,8 +21,8 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
 
             builder.HasOne<Site>()
                    .WithMany()
-                   .HasForeignKey(v => v.SiteID)
-                   .HasConstraintName("FK_Voter_Company");
+                   .HasForeignKey(v => v.SiteId)
+                   .HasConstraintName("FK_Voter_Site");
 
             builder.HasOne<Profile>()
                    .WithMany()

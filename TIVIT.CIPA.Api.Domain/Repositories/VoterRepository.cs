@@ -36,7 +36,10 @@ namespace TIVIT.CIPA.Api.Domain.Repositories
 
         public async Task<IEnumerable<Voter>> GetByElectionIdAsync(int electionId)
         {
-            return await _dbContext.Voters.Where(x => x.ElectionId == electionId).ToListAsync();
+            return await _dbContext.Voters
+                .Include(v => v.Site)
+                .Where(v => v.ElectionId == electionId && v.IsActive)
+                .ToListAsync();
         }
 
         public async Task UpdateAsync(Voter voter)

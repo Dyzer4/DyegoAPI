@@ -8,7 +8,7 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("User");
+            builder.ToTable("UserTable");
 
             builder.HasKey(u => u.Id);
 

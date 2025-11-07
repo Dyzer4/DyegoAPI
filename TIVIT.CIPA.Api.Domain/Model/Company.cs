@@ -10,6 +10,6 @@
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; } = true;
 
-        public Site Site { get; set; }
+        public ICollection<Site> Sites { get; set; }
     }
 }

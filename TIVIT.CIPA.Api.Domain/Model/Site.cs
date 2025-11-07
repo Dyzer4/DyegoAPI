@@ -11,6 +11,7 @@ namespace TIVIT.CIPA.Api.Domain.Model
         public bool IsActive { get; set; } = true;
 
         public Company Company { get; set; }
+        public ICollection<Voter> Voters { get; set; }
         public ICollection<Candidate> Candidates { get; set; }
         public ICollection<ElectionSite> ElectionSites { get; set; }
     }
