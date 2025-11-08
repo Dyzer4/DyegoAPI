@@ -19,13 +19,13 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
                    .HasConstraintName("FK_Voter_Election");
 
 
-            builder.HasOne<Site>()
-                   .WithMany()
+            builder.HasOne<Site>(v => v.Site)
+                   .WithMany(e => e.Voters)
                    .HasForeignKey(v => v.SiteId)
                    .HasConstraintName("FK_Voter_Site");
 
-            builder.HasOne<Profile>()
-                   .WithMany()
+            builder.HasOne<Profile>(v => v.Profile)
+                   .WithMany(e => e.Voters)
                    .HasForeignKey(v => v.ProfileId)
                    .HasConstraintName("FK_Voter_Profile");
 

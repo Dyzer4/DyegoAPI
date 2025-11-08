@@ -87,8 +87,7 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
 
             builder.HasMany(e => e.Candidates)
                 .WithOne(c => c.Election)
-                .HasForeignKey(c => c.ElectionId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(c => c.ElectionId);
         }
     }
 }

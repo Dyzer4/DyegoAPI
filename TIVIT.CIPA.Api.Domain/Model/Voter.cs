@@ -27,6 +27,7 @@
         public DateTime? UpdateDate { get; set; }
         public string UpdateUser { get; set; }
 
+        public Profile Profile { get; set; }
         public Site Site { get; set; }
         public Election Election { get; set; }
         public ICollection<Candidate> Candidates { get; set; } = new List<Candidate>();

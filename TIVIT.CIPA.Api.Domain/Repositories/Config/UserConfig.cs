@@ -44,7 +44,6 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
             builder.HasOne(u => u.Profile)
                 .WithMany()
                 .HasForeignKey(u => u.ProfileId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_User_Profile");
         }
     }
