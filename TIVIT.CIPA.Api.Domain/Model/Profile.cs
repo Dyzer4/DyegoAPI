@@ -12,11 +12,11 @@
         public DateTime? UpdateDate { get; set; }
         public string UpdateUser { get; set; }
 
-        public ICollection<User> Users { get; set; }
-        public ICollection<Voter> Voters { get; set; }
-        public ICollection<ProfileAction> ProfileActions { get; set; }
+        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<Voter> Voters { get; set; }
+        public virtual ICollection<ProfileAction> ProfileActions { get; set; }
 
         public bool IsGlobalAdmin => Code.Equals(GlobalAdmin);
-        public const string GlobalAdmin = "global_admin";
+        public const string GlobalAdmin = "ADMIN";
     }
 }

@@ -18,21 +18,21 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
                    .HasForeignKey(v => v.ElectionId)
                    .HasConstraintName("FK_Voter_Election");
 
-
-            builder.HasOne<Site>(v => v.Site)
-                   .WithMany(e => e.Voters)
+            builder.HasOne(v => v.Site)
+                   .WithMany(s => s.Voters)
                    .HasForeignKey(v => v.SiteId)
                    .HasConstraintName("FK_Voter_Site");
 
-            builder.HasOne<Profile>(v => v.Profile)
-                   .WithMany(e => e.Voters)
+            builder.HasOne(v => v.Profile)
+                   .WithMany(p => p.Voters)
                    .HasForeignKey(v => v.ProfileId)
+                   .IsRequired(true)
                    .HasConstraintName("FK_Voter_Profile");
 
-
             builder.Property(v => v.CorporateId)
-                   .HasMaxLength(10)
-                   .IsUnicode(false);
+                   .HasMaxLength(50)
+                   .IsUnicode(false)
+                   .IsRequired();
 
             builder.Property(v => v.Name)
                    .HasMaxLength(200)
@@ -41,6 +41,9 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
             builder.Property(v => v.Email)
                    .HasMaxLength(200)
                    .IsRequired();
+
+            builder.HasIndex(v => v.Email)
+                   .IsUnique();
 
             builder.Property(v => v.CorporateEmail)
                    .HasMaxLength(150);
@@ -52,8 +55,7 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
                    .HasMaxLength(20);
 
             builder.Property(v => v.Area)
-                   .HasMaxLength(200)
-                   .IsRequired();
+                   .HasMaxLength(100);
 
             builder.Property(v => v.Department)
                    .HasMaxLength(100);
@@ -73,7 +75,8 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
                    .HasDefaultValue(true);
 
             builder.Property(v => v.CreateDate)
-                   .HasDefaultValueSql("GETDATE()");
+                   .HasDefaultValueSql("GETDATE()")
+                   .IsRequired();
 
             builder.Property(v => v.ExclusionReason)
                    .HasMaxLength(300);
@@ -94,7 +97,7 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
                    .HasColumnType("date")
                    .IsRequired();
 
-            builder.Property<DateTime>("AdmissionDate")
+            builder.Property(v => v.AdmissionDate)
                    .HasColumnType("date")
                    .IsRequired();
         }

@@ -34,12 +34,17 @@ namespace TIVIT.CIPA.Api.Domain.Repositories
                 .FirstOrDefaultAsync(x => x.CorporateId == corporateId);
         }
 
-        public async Task<IEnumerable<Voter>> GetByElectionIdAsync(int electionId)
+        public async Task<Voter?> GetByCorporateIdandElectionIdAsync(int electionId, string corporateId)
         {
             return await _dbContext.Voters
-                .Include(v => v.Site)
-                .Where(v => v.ElectionId == electionId && v.IsActive)
-                .ToListAsync();
+                .Where(x => x.IsActive)
+                .Where(x => x.ElectionId == electionId)
+                .FirstOrDefaultAsync(x => x.CorporateId == corporateId);
+        }
+
+        public async Task<IEnumerable<Voter>> GetByElectionIdAsync(int electionId)
+        {
+            return await _dbContext.Voters.Where(x => x.ElectionId == electionId).ToListAsync();
         }
 
         public async Task UpdateAsync(Voter voter)
@@ -53,7 +58,7 @@ namespace TIVIT.CIPA.Api.Domain.Repositories
             await _dbContext.Voters.AddAsync(voter);
             await _dbContext.SaveChangesAsync();
         }
-               
+
         public bool ExistsById(int id)
         {
             return _dbContext.Voters.Any(x => x.Id == id);

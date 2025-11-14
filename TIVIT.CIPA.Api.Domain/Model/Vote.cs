@@ -1,6 +1,4 @@
-﻿using System.ClientModel;
-
-namespace TIVIT.CIPA.Api.Domain.Model
+﻿namespace TIVIT.CIPA.Api.Domain.Model
 {
     public class Vote
     {

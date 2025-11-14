@@ -36,7 +36,6 @@ namespace TIVIT.CIPA.Api.Domain.Repositories.Config
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_UserAuth_User");
 
-            builder.Ignore(ua => ua.RefreshTokenExp);
             builder.Ignore(ua => ua.PasswordRecoverKey);
             builder.Ignore(ua => ua.PasswordRecoverKeyExp);
         }

@@ -14,7 +14,9 @@ namespace TIVIT.CIPA.Api.Domain.Repositories
 
         public async Task<IEnumerable<Site>> GetAllAsync()
         {
-            return await dbContext.Sites.ToListAsync();
+            return await dbContext.Sites
+                .Include(x => x.Company)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Site>> GetActiveAsync()

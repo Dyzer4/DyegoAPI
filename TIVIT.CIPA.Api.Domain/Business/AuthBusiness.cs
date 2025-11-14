@@ -59,17 +59,21 @@ namespace TIVIT.CIPA.Api.Domain.Business
 
             var password = _passwordProvider.CreatePasswordHash(request.Password);
 
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Email == request.Username && x.IsActive);
+            var user = await _userRepository.GetFirstOrDefaultAsync(
+                x => x.Email == request.Username && x.IsActive);
+
             if (user == null)
             {
-                response.AddMessage(" Usuário não encontrado.");
+                response.AddMessage("Usuário não encontrado.");
                 return response;
             }
 
-            var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == user.Id && x.Password == password);
+            var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                x => x.UserId == user.Id && x.Password == password);
+
             if (userAuth == null)
             {
-                response.AddMessage(" Usuário e/ou senha inválidos.");
+                response.AddMessage("Usuário e/ou senha inválidos.");
                 return response;
             }
 
@@ -100,14 +104,17 @@ namespace TIVIT.CIPA.Api.Domain.Business
                 return response;
             }
 
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Email == id && x.IsActive);
+            var user = await _userRepository.GetFirstOrDefaultAsync(
+                x => x.Email == id && x.IsActive);
+
             if (user == null)
             {
                 response.AddMessage("Usuário inválido.");
                 return response;
             }
 
-            var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == user.Id);
+            var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                x => x.UserId == user.Id);
 
             var accessToken = _tokenProvider.GenerateToken(user.Email);
             var refreshToken = await GenerateRefreshTokenAsync(user.Id);
@@ -136,14 +143,17 @@ namespace TIVIT.CIPA.Api.Domain.Business
 
             var username = _tokenProvider.GetIdentifierFromToken(request.AccessToken);
 
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Email == username && x.IsActive);
+            var user = await _userRepository.GetFirstOrDefaultAsync(
+                x => x.Email == username && x.IsActive);
+
             if (user == null)
             {
                 response.AddMessage("Usuário inválido");
                 return response;
             }
 
-            var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == user.Id);
+            var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                x => x.UserId == user.Id);
 
             var validRefreshToken = await ValidateRefreshTokenAsync(user.Id, request.RefreshToken);
             if (!validRefreshToken)
@@ -162,13 +172,18 @@ namespace TIVIT.CIPA.Api.Domain.Business
 
         public async Task LogOutAsync()
         {
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Email.Equals(_userInfo.Upn, StringComparison.CurrentCultureIgnoreCase));
+            var user = await _userRepository.GetFirstOrDefaultAsync(
+                x => x.Email.Equals(_userInfo.Upn, StringComparison.CurrentCultureIgnoreCase));
 
-            var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == user.Id);
+            if (user == null) return;
+
+            var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                x => x.UserId == user.Id);
+
             if (userAuth != null)
             {
-                userAuth.RefreshToken = userAuth.RefreshToken;
-                userAuth.RefreshTokenExp = userAuth.RefreshTokenExp;
+                userAuth.RefreshToken = null;
+                userAuth.LastLogin = DateTime.UtcNow;
 
                 await _authRepository.UpdateAsync(userAuth);
             }
@@ -176,18 +191,22 @@ namespace TIVIT.CIPA.Api.Domain.Business
 
         public async Task SavePasswordAsync(AuthRequest request)
         {
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Email == request.Username && x.IsActive);
+            var user = await _userRepository.GetFirstOrDefaultAsync(
+                x => x.Email == request.Username && x.IsActive);
+
             if (user != null)
             {
-                var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == user.Id);
+                var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                    x => x.UserId == user.Id);
 
                 if (userAuth == null) return;
 
                 var password = _passwordProvider.CreatePasswordHash(request.Password);
 
                 userAuth.Password = password;
+                userAuth.FirstAccess = false;
 
-                await _userRepository.UpdateAsync(user);
+                await _authRepository.UpdateAsync(userAuth);
             }
         }
 
@@ -195,13 +214,16 @@ namespace TIVIT.CIPA.Api.Domain.Business
         {
             var response = new Response();
 
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Email == username && x.IsActive);
+            var user = await _userRepository.GetFirstOrDefaultAsync(
+                x => x.Email == username && x.IsActive);
 
             if (user == null) return response;
 
             var (key, expiresUtc) = PasswordProvider.GeneratePasswordKey(5);
 
-            var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == user.Id);
+            var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                x => x.UserId == user.Id);
+
             if (userAuth == null)
             {
                 userAuth = UserAuth.CreatePasswordRecover(user.Id, key, expiresUtc);
@@ -247,7 +269,8 @@ namespace TIVIT.CIPA.Api.Domain.Business
             var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == userId);
             if (user != null)
             {
-                var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == user.Id);
+                var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                    x => x.UserId == user.Id);
 
                 if (userAuth == null) return response;
 
@@ -255,7 +278,7 @@ namespace TIVIT.CIPA.Api.Domain.Business
 
                 userAuth.Password = password;
 
-                await _userRepository.UpdateAsync(user);
+                await _authRepository.UpdateAsync(userAuth);
             }
 
             return response;
@@ -273,10 +296,13 @@ namespace TIVIT.CIPA.Api.Domain.Business
                 return response;
             }
 
-            var user = await _userRepository.GetFirstOrDefaultAsync(u => u.Email.ToLower() == _userInfo.Upn.ToLower() && u.IsActive);
+            var user = await _userRepository.GetFirstOrDefaultAsync(
+                u => u.Email.ToLower() == _userInfo.Upn.ToLower() && u.IsActive);
+
             if (user != null)
             {
-                var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == user.Id);
+                var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                    x => x.UserId == user.Id);
 
                 if (userAuth == null) return response;
 
@@ -285,24 +311,30 @@ namespace TIVIT.CIPA.Api.Domain.Business
                 userAuth.Password = password;
                 userAuth.FirstAccess = false;
 
-                await _userRepository.UpdateAsync(user);
+                await _authRepository.UpdateAsync(userAuth);
             }
 
             return response;
         }
 
-        public async Task<Response<(int userId, double secondsToExpire)>> CheckPasswordRecoverKeyAsync(string passwordRecoverKey)
+        public async Task<Response<(int userId, double secondsToExpire)>> CheckPasswordRecoverKeyAsync(
+            string passwordRecoverKey)
         {
             var response = new Response<(int userId, double secondsToExpire)>();
 
-            var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.PasswordRecoverKey == passwordRecoverKey);
+            var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                x => x.PasswordRecoverKey == passwordRecoverKey);
+
             if (userAuth == null)
             {
                 response.AddMessage("Chave inválida.");
                 return response;
             }
 
-            var secondsToExpire = ((DateTimeOffset)userAuth.PasswordRecoverKeyExp - DateTime.UtcNow).TotalSeconds;
+            var secondsToExpire = (userAuth.PasswordRecoverKeyExp.HasValue
+                ? (userAuth.PasswordRecoverKeyExp.Value - DateTime.UtcNow).TotalSeconds
+                : -1);
+
             if (secondsToExpire <= 0)
             {
                 response.AddMessage("Chave expirada. Faça uma nova solicitação para recuperação de senha.");
@@ -318,19 +350,23 @@ namespace TIVIT.CIPA.Api.Domain.Business
         {
             var response = new Response<ExternalAuthResponse>();
 
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Email == request.Username && x.IsActive);
+            var user = await _userRepository.GetFirstOrDefaultAsync(
+                x => x.Email == request.Username && x.IsActive);
+
             if (user == null)
             {
-                response.AddMessage(" Usuário não encontrado.");
+                response.AddMessage("Usuário não encontrado.");
                 return response;
             }
 
             var password = _passwordProvider.CreatePasswordHash(request.Password);
 
-            var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == user.Id && x.Password == password);
+            var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                x => x.UserId == user.Id && x.Password == password);
+
             if (userAuth == null)
             {
-                response.AddMessage(" Usuário e/ou Senha inválido(s).");
+                response.AddMessage("Usuário e/ou Senha inválido(s).");
                 return response;
             }
 
@@ -353,14 +389,14 @@ namespace TIVIT.CIPA.Api.Domain.Business
                 {
                     UserId = userId,
                     RefreshToken = Token,
-                    RefreshTokenExp = ExpiresUtc
+                    IsActive = true
                 };
                 await _authRepository.CreateAsync(userAuth);
             }
             else
             {
                 userAuth.RefreshToken = Token;
-                userAuth.RefreshTokenExp = ExpiresUtc;
+                userAuth.LastLogin = DateTime.UtcNow;
 
                 await _authRepository.UpdateAsync(userAuth);
             }
@@ -375,8 +411,8 @@ namespace TIVIT.CIPA.Api.Domain.Business
 
             ArgumentNullException.ThrowIfNull(actionRes);
 
-            var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == actionRes.User.Id);
-
+            var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                x => x.UserId == actionRes.User.Id);
 
             var payload = new Payload(
                 actionRes.User.Email,
@@ -393,9 +429,11 @@ namespace TIVIT.CIPA.Api.Domain.Business
 
         private async Task<bool> ValidateRefreshTokenAsync(int userId, string refreshToken)
         {
-            var userAuth = await _authRepository.GetFirstOrDefaultAsync(x => x.UserId == userId && x.RefreshToken == refreshToken);
+            var userAuth = await _authRepository.GetFirstOrDefaultAsync(
+                x => x.UserId == userId && x.RefreshToken == refreshToken);
 
-            return userAuth?.RefreshTokenExp >= DateTimeOffset.UtcNow;
+            // Se não existir ou RefreshTokenExp for null, retornar false
+            return userAuth?.IsActive == true;
         }
 
         private async Task<bool> SendEmailOtpContent(string otp, string email, string userName)
@@ -408,12 +446,9 @@ namespace TIVIT.CIPA.Api.Domain.Business
         private async Task<bool> SendEmailPasswordRecoverContent(string key, string email, string userName)
         {
             var subject = "CIPA - Recuperação de Senha";
-
             var link = "https://example.xpto";
-
             var content = AuthMailContent.GetPasswordRecoverContent(key, userName, link);
             return await _notificationService.SendEmailAsync(content, email, subject);
         }
-
     }
 }

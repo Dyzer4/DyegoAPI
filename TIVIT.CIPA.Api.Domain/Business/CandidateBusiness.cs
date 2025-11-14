@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Localization;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Microsoft.Extensions.Localization;
 using System.Text.RegularExpressions;
 using TIVIT.CIPA.Api.Domain.Interfaces.Business;
 using TIVIT.CIPA.Api.Domain.Interfaces.Models;
@@ -17,17 +18,23 @@ namespace TIVIT.CIPA.Api.Domain.Business
         private readonly ICandidateRepository _candidateRepository;
         private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly IVoterRepository _voterRepository;
+        private readonly IElectionRepository _electionRepository;
+        private readonly ISiteRepository _siteRepository;
 
         public CandidateBusiness(
             IUserInfo userInfo,
             ICandidateRepository candidateRepository,
             IVoterRepository voterRepository,
-            IStringLocalizer<SharedResource> localizer)
+            IStringLocalizer<SharedResource> localizer,
+            IElectionRepository electionRepository,
+            ISiteRepository siteRepository)
         {
             _userInfo = userInfo;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _localizer = localizer;
+            _electionRepository = electionRepository;
+            _siteRepository = siteRepository;
         }
 
         public async Task<Response<CandidateDetailResponse>> GetByIdAsync(int id)
@@ -44,7 +51,6 @@ namespace TIVIT.CIPA.Api.Domain.Business
             response.Data = new CandidateDetailResponse()
             {
                 Id = candidate.Id,
-                ElectionId = candidate.ElectionId,
                 Name = candidate.Voter.Name,
                 Department = candidate.Voter.Department,
                 PhotoBase64 = photoBase64,
@@ -54,25 +60,24 @@ namespace TIVIT.CIPA.Api.Domain.Business
             return response;
         }
 
-        public async Task<Response<IEnumerable<CandidateDetailResponse>>> GetByElectionIdAsync(int electionId)
+        public async Task<Response<IEnumerable<CandidateElectionListResponse>>> GetByElectionIdAsync(int electionId)
         {
-            var response = new Response<IEnumerable<CandidateDetailResponse>>();
+            var response = new Response<IEnumerable<CandidateElectionListResponse>>();
 
             var candidates = await this._candidateRepository.GetByElectionIdAsync(electionId);
 
             if (candidates == null)
                 return response;
 
-            response.Data = candidates.Select(x => new CandidateDetailResponse()
+            response.Data = candidates.Select(x => new CandidateElectionListResponse()
             {
                 Id = x.Id,
-                ElectionId = x.ElectionId,
+                SiteName = x.Voter.Site.Name,
                 Name = x.Voter.Name,
-                Department = x.Voter.Department,
+                Area = x.Voter.Area,
                 PhotoBase64 = x.PhotoBase64 != null && x.PhotoBase64.Length > 0
                 ? $"data:{x.PhotoMimeType};base64,{Convert.ToBase64String(x.PhotoBase64)}"
-                : null,
-                IsActive = x.IsActive,
+                : null
             });
 
             return response;
@@ -90,12 +95,52 @@ namespace TIVIT.CIPA.Api.Domain.Business
             response.Data = candidates.Select(x => new CandidateResumeResponse()
             {
                 Id = x.Id,
-                ElectionId = x.ElectionId,
-                Site = x.Site.Name,
+                ElectionId = x.Voter.ElectionId,
+                Site = x.Voter.Site.Name,
                 Name = x.Voter.Name,
                 Department = x.Voter.Department,
                 IsActive = x.IsActive
             });
+
+            return response;
+        }
+
+        public async Task<Response<CandidateVerifyResponse>> GetVoterByCorporateIdandElectionIdAsync(int electionId, string corporateId)
+        {
+            var response = new Response<CandidateVerifyResponse>();
+            var candidate = await this._candidateRepository.GetByCorporateIdandElectionIdAsync(electionId, corporateId);
+
+            if (candidate == null)
+                return response;
+
+            var admission = candidate.AdmissionDate.Date;
+            var today = DateTime.Now.Date;
+
+            double days = (today - admission).TotalDays;
+
+            bool status = days >= 90; 
+
+            string message = status
+                ? "Colaborador elegível."
+                : $"Colaborador não elegível. Possui somente {days} dias de admissão.";
+
+            response.Data = new CandidateVerifyResponse()
+            {
+                VoterId = candidate.Id,
+                CorporateId = candidate.CorporateId,
+                Name = candidate.Name,
+                SiteName = candidate.Site.Name,
+                Department = candidate.Department,
+                Area = candidate.Area,
+                CorporateEmail = candidate.CorporateEmail,
+                BirthDate = candidate.BirthDate,
+                AdmissionDate = candidate.AdmissionDate,
+                ContactPhone = candidate.ContactPhone,
+                ElectionName = candidate.Election?.Name,
+                IsActive = candidate.IsActive,
+                IsAvailable = status,    
+                Message = message        
+            };
 
             return response;
         }
@@ -107,15 +152,19 @@ namespace TIVIT.CIPA.Api.Domain.Business
             byte[] photoBytes = null;
             string mimeType = null;
             string base64Data = null;
+
             try
             {
                 if (!string.IsNullOrEmpty(createRequest.PhotoBase64))
                 {
                     base64Data = createRequest.PhotoBase64;
+
                     var base64Index = base64Data.IndexOf("base64,");
                     if (base64Index >= 0)
                     {
-                        var match = Regex.Match(createRequest.PhotoBase64, @"^data:(?<mime>.+?);base64,(?<data>.+)$");
+                        var match = Regex.Match(createRequest.PhotoBase64,
+                            @"^data:(?<mime>.+?);base64,(?<data>.+)$");
+
                         if (match.Success)
                         {
                             mimeType = match.Groups["mime"].Value;
@@ -129,20 +178,23 @@ namespace TIVIT.CIPA.Api.Domain.Business
                     }
                 }
             }
-            catch (Exception)
+            catch
             {
                 throw new ArgumentException("Formato de imagem (Base64) inválido.");
             }
 
             var validator = new CandidateValidator(_candidateRepository, _localizer);
-            validator.ValidateCreate(createRequest, photoBytes, mimeType);
+            await validator.ValidateCreateAsync(createRequest, photoBytes, mimeType);
+
             if (!validator.IsValid)
             {
                 response.AddMessage(validator.Notifications.Select(x => x.Message));
                 return response;
             }
 
-            var voter = await _voterRepository.GetByCorporateIdAsync(createRequest.CorporateId);
+            var voter = await _candidateRepository.GetByCorporateIdandElectionIdAsync(
+                createRequest.ElectionId,
+                createRequest.CorporateId);
 
             if (voter == null)
             {
@@ -152,9 +204,7 @@ namespace TIVIT.CIPA.Api.Domain.Business
 
             var candidate = new Candidate()
             {
-                ElectionId = createRequest.ElectionId,
-                SiteId = createRequest.SiteId,
-                VoterID = voter.Id,
+                VoterId = voter.Id,
                 PhotoBase64 = photoBytes,
                 PhotoMimeType = mimeType,
                 IsActive = true,
@@ -165,9 +215,9 @@ namespace TIVIT.CIPA.Api.Domain.Business
             await _candidateRepository.CreateAsync(candidate);
 
             response.Data = candidate.Id;
-
             return response;
         }
+
 
         public async Task<Response> UpdateAsync(int id, CandidateUpdateRequest updateRequest)
         {
@@ -214,9 +264,7 @@ namespace TIVIT.CIPA.Api.Domain.Business
             var candidate = await this._candidateRepository.GetByIdAsync(id);
             var voter = await _voterRepository.GetByCorporateIdAsync(updateRequest.CorporateId);
 
-            candidate.ElectionId = updateRequest.ElectionId;
-            candidate.SiteId = updateRequest.SiteId;
-            candidate.VoterID = voter.Id;
+            candidate.VoterId = voter.Id;
             candidate.PhotoBase64 = photoBytes;
             candidate.PhotoMimeType = mimeType;
             candidate.UpdateDate = DateTime.Now;

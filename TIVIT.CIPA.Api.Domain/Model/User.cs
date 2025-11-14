@@ -14,6 +14,7 @@
         public DateTime? UpdateDate { get; set; }
         public string UpdateUser { get; set; }
 
-        public Profile Profile { get; set; }
+        public virtual Profile Profile { get; set; }
+        public virtual UserAuth UserAuth { get; set; }
     }
 }

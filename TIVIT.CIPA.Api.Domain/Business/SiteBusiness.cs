@@ -1,22 +1,9 @@
-﻿using Azure.Core;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.Extensions.Localization;
-using Microsoft.Graph;
-using System.Text.RegularExpressions;
+﻿using Microsoft.Extensions.Localization;
 using TIVIT.CIPA.Api.Domain.Interfaces.Business;
 using TIVIT.CIPA.Api.Domain.Interfaces.Models;
 using TIVIT.CIPA.Api.Domain.Interfaces.Repositories;
-using TIVIT.CIPA.Api.Domain.Interfaces.Services;
-using TIVIT.CIPA.Api.Domain.Model;
-using TIVIT.CIPA.Api.Domain.Model.Requests;
 using TIVIT.CIPA.Api.Domain.Model.Responses;
-using TIVIT.CIPA.Api.Domain.Model.Services;
-using TIVIT.CIPA.Api.Domain.Providers;
 using TIVIT.CIPA.Api.Domain.Resources;
-using TIVIT.CIPA.Api.Domain.Settings;
-using TIVIT.CIPA.Api.Domain.Validators;
 
 
 namespace TIVIT.CIPA.Api.Domain.Business
@@ -63,7 +50,7 @@ namespace TIVIT.CIPA.Api.Domain.Business
         {
             var response = new Response<IEnumerable<SiteResponse>>();
 
-            var sites = await this._siteRepository.GetAllAsync();
+            var sites = await _siteRepository.GetAllAsync();
 
             response.Data = sites.Select(x => new SiteResponse()
             {

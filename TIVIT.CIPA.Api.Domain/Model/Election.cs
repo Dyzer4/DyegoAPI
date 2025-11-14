@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TIVIT.CIPA.Api.Domain.Model
+﻿namespace TIVIT.CIPA.Api.Domain.Model
 {
     public class Election
     {
@@ -25,9 +22,11 @@ namespace TIVIT.CIPA.Api.Domain.Model
         public DateTime? UpdateDate { get; set; }
         public string UpdateUser { get; set; }
 
-        public ICollection<Candidate> Candidates { get; set; } = new List<Candidate>();
         public ICollection<ElectionSite> ElectionSites { get; set; } = new List<ElectionSite>();
         public ICollection<Voter> Voters { get; set; } = new List<Voter>();
         public ICollection<Vote> Votes { get; set; } = new List<Vote>();
+        
+        public virtual ICollection<VoteLog> VoteLogs { get; set; }
+        public virtual ICollection<ExclusionLog> ExclusionLogs { get; set; }
     }
 }

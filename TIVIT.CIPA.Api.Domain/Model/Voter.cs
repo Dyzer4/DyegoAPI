@@ -13,6 +13,7 @@
         public string CorporatePhone { get; set; }
         public string ContactPhone { get; set; }
         public DateTime BirthDate { get; set; }
+        public DateTime AdmissionDate { get; set; }
         public string Area { get; set; }
 
         public string Department { get; set; }
@@ -27,10 +28,11 @@
         public DateTime? UpdateDate { get; set; }
         public string UpdateUser { get; set; }
 
-        public Profile Profile { get; set; }
         public Site Site { get; set; }
+        public Profile Profile { get; set; }
         public Election Election { get; set; }
         public ICollection<Candidate> Candidates { get; set; } = new List<Candidate>();
         public ICollection<VoterAction> VoterActions { get; set; } = new List<VoterAction>();
+        public virtual ICollection<TokenSend> TokensSent { get; set; }
     }
 }

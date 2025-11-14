@@ -1,4 +1,5 @@
-﻿namespace TIVIT.CIPA.Api.Domain.Model.Responses
+﻿
+namespace TIVIT.CIPA.Api.Domain.Model.Responses
 {
     public class SiteResponse
     {
@@ -7,5 +8,10 @@
         public string ProtheusCode { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+
+        public static implicit operator string(SiteResponse v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

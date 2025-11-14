@@ -8,5 +8,6 @@
         public string AppId { get; }
         public string Role { get; }
         public string Language { get; }
+        int SiteID { get; }
     }
 }

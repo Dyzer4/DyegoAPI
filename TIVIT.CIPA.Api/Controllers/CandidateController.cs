@@ -48,9 +48,27 @@ namespace TIVIT.CIPA.Api.Controllers
 #if !DEBUG
         [Action("adm_candidato", "consultar_candidato","adm_eleicao", "consultar_eleicao")]
 #endif
-        public async Task<ActionResult<IEnumerable<CandidateDetailResponse>>> GetByElectionIdAsync([FromRoute] int electionId)
+        public async Task<ActionResult<IEnumerable<CandidateElectionListResponse>>> GetByElectionIdAsync([FromRoute] int electionId)
         {
             var response = await business.GetByElectionIdAsync(electionId);
+
+            if (response.HasErrors)
+                return BadRequest(response.Messages);
+
+            return Ok(response.Data);
+        }
+
+
+        [HttpGet("validateCandidate")]
+#if !DEBUG
+        [Action("adm_candidato", "consultar_candidato")]
+#endif
+        public async Task<ActionResult<CandidateVerifyResponse>> GetVoterByCorporateIdandElectionIdAsync(
+            [FromQuery] int electionId,
+            [FromQuery] string? corporateId
+            )
+        {
+            var response = await business.GetVoterByCorporateIdandElectionIdAsync(electionId, corporateId);
 
             if (response.HasErrors)
                 return BadRequest(response.Messages);

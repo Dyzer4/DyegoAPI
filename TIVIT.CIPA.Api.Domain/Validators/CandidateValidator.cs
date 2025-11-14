@@ -25,26 +25,44 @@ namespace TIVIT.CIPA.Api.Domain.Validators
             _localizer = localizer;
         }
 
-        public void ValidateCreate(CandidateCreateRequest request, byte[] photoBytes, string mimeType)
+        public async Task ValidateCreateAsync(CandidateCreateRequest request, byte[] photoBytes, string mimeType)
         {
             AddNotifications(new Contract<CandidateCreateRequest>()
                 .Requires()
-
                 .IsNotNullOrWhiteSpace(request.CorporateId, "CorporateId", "Matricula é obrigatório")
                 .IsGreaterThan(request.ElectionId, 0, "ElectionId", "ElectionId inválido")
                 .IsNotNullOrWhiteSpace(request.PhotoBase64, "Foto", "Foto do candidato é obrigatório")
             );
 
-            if (string.IsNullOrWhiteSpace(request.PhotoBase64))
-                return;
+            // Busca o eleitor no validator
+            var voter = await _candidateRepository.GetByCorporateIdandElectionIdAsync(
+                request.ElectionId, request.CorporateId);
 
-            if (string.IsNullOrWhiteSpace(mimeType) || !AllowedMimeTypes.Contains(mimeType))
+            if (voter == null)
             {
-                AddNotification(nameof(request.PhotoBase64), "Tipo de imagem inválido. Use JPEG ou PNG.");
+                AddNotification("CorporateId", $"Nenhum eleitor encontrado com CorporateId '{request.CorporateId}'.");
                 return;
             }
 
-            // Valida Base64 e tamanho
+            // =============================
+            // VALIDAÇÃO DOS 90 DIAS
+            // =============================
+            var admission = voter.AdmissionDate.Date;
+            var today = DateTime.Now.Date;
+
+            double days = (today - admission).TotalDays;
+
+            if (days < 90)
+            {
+                AddNotification("AdmissionDate",
+                    $"O colaborador não possui 90 dias de admissão. Possui {days} dias.");
+                return;
+            }
+
+            // Foto
+            if (string.IsNullOrWhiteSpace(mimeType) || !AllowedMimeTypes.Contains(mimeType))
+                AddNotification(nameof(request.PhotoBase64), "Tipo de imagem inválido. Use JPEG ou PNG.");
+
             if (photoBytes.Length > MaxImageSizeBytes)
                 AddNotification(nameof(request.PhotoBase64), "A imagem não pode ultrapassar 3 MB.");
         }

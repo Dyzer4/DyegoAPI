@@ -2,34 +2,43 @@
 {
     public class UserAuth
     {
-        public int Id { get;  set; }
+        public int Id { get; set; }
         public int UserId { get; set; }
+        public byte[] Password { get; set; }  // ✅ MUDADO: string → byte[]
         public string RefreshToken { get; set; }
-        public byte[] Password { get; set; }
-        public bool IsActive { get; set; } = true;
-        public bool FirstAccess { get; set; } = true;
-
-        public DateOnly? LastLogin { get; set; }
-        public DateTimeOffset? RefreshTokenExp { get; set; }
+        public DateTime? LastLogin { get; set; }
+        public bool IsActive { get; set; }
         public string PasswordRecoverKey { get; set; }
-        public DateTimeOffset? PasswordRecoverKeyExp { get; set; }
+        public DateTime? PasswordRecoverKeyExp { get; set; }
+        public bool FirstAccess { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
-        public static UserAuth CreatePasswordRecover(int userId, string passwordRecoverKey, DateTimeOffset? passwordRecoverKeyExp)
+        public static UserAuth CreatePasswordRecover(int userId, string passwordRecoverKey, DateTime? passwordRecoverKeyExp)
         {
             return new()
             {
                 UserId = userId,
                 PasswordRecoverKey = passwordRecoverKey,
-                PasswordRecoverKeyExp = passwordRecoverKeyExp
+                PasswordRecoverKeyExp = passwordRecoverKeyExp,
+                IsActive = true
             };
         }
 
-        public void UpdatePasswordRecover(string passwordRecoverKey, DateTimeOffset? passwordRecoverKeyExp)
+        internal static UserAuth CreatePasswordRecover(int id, string key, DateTimeOffset expiresUtc)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePasswordRecover(string passwordRecoverKey, DateTime? passwordRecoverKeyExp)
         {
             PasswordRecoverKey = passwordRecoverKey;
             PasswordRecoverKeyExp = passwordRecoverKeyExp;
+        }
+
+        internal void UpdatePasswordRecover(string key, DateTimeOffset expiresUtc)
+        {
+            throw new NotImplementedException();
         }
     }
 }

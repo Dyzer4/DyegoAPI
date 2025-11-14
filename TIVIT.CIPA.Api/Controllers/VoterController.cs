@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using TIVIT.CIPA.Api.Attributes;
 using TIVIT.CIPA.Api.Domain.Interfaces.Business;
+using TIVIT.CIPA.Api.Domain.Interfaces.Models;
 using TIVIT.CIPA.Api.Domain.Model.Requests;
 using TIVIT.CIPA.Api.Domain.Model.Responses;
 
@@ -16,14 +17,9 @@ namespace TIVIT.CIPA.Api.Controllers
     //[Role("global_admin", "admin")]
     [Route("voters")]
     [ApiController]
-    public class VoterController(IVoterBusiness business) : ControllerBase
+    public class VoterController(IVoterBusiness business, IUserInfo userInfo) : ControllerBase
     {
-
-        /// <summary>
-        ///  Obtem os detalhes de um eleitor
-        /// </summary>
-        /// <param name="voterId"></param>
-        /// <returns>Detalhe do eleitor</returns>
+       
         [HttpGet("{voterId}")]
 #if !DEBUG
         [Action("adm_eleitor", "consultar_eleitor","adm_eleicao", "consultar_eleicao")]
@@ -39,11 +35,6 @@ namespace TIVIT.CIPA.Api.Controllers
         }
 
 
-        /// <summary>
-        ///  Obtem os eleitores
-        /// </summary>
-        /// <param name="electionId"></param>
-        /// <returns>Lista de eleitores</returns>
         [HttpGet("by-election/{electionId}")]
 #if !DEBUG
         [Action("adm_eleitor", "consultar_eleitor","adm_eleicao", "consultar_eleicao")]
@@ -58,11 +49,6 @@ namespace TIVIT.CIPA.Api.Controllers
             return Ok(response.Data);
         }
 
-        /// <summary>
-        /// Cria um eleitor
-        /// </summary>
-        /// <param name="request">Dados do eleitor</param>
-        /// <returns>Id do eleitor</returns>
         [HttpPost]
 #if !DEBUG
         [Action("adm_eleitor")]
@@ -77,12 +63,6 @@ namespace TIVIT.CIPA.Api.Controllers
             return Created(string.Empty, response.Data);
         }
 
-        /// <summary>
-        /// Atualiza um eleitor
-        /// </summary>
-        /// <param name="id">id do eleitor</param>
-        /// <param name="request">dados do eleitor</param>
-        /// <returns></returns>
         [HttpPut("{id}")]
 #if !DEBUG
         [Action("adm_eleitor")]
@@ -97,12 +77,7 @@ namespace TIVIT.CIPA.Api.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// Ativa ou desativa uma candidato
-        /// </summary>
-        /// <param name="id">Id da candidato</param>
-        /// <param name="active">Ativar ou desativar</param>
-        /// <returns></returns>
+  
         [HttpPut("{id}/active")]
 #if !DEBUG
         [Action("adm_eleitor")]
@@ -117,42 +92,50 @@ namespace TIVIT.CIPA.Api.Controllers
             return Ok();
         }
 
-
+    
         [HttpPut("sync-file/{electionId}")]
-        public async Task<ActionResult> SyncByFileAsync([FromRoute] int electionId)
+#if !DEBUG
+        [Action("adm_eleitor")]
+#endif
+        public async Task<ActionResult<Response<int>>> SyncByFileAsync([FromRoute] int electionId)
         {
-            var entry = Request.Form.Files.FirstOrDefault(file => file.ContentType == "application/json" && file.Name == "entry");
-            var file = Request.Form.Files.FirstOrDefault(file => file.Name == "file");
+            if (electionId <= 0)
+                return BadRequest("ID da eleição inválido.");
 
-            if (entry == null)
+            var file = Request.Form.Files.FirstOrDefault(f => f.Name == "file");
+            if (file == null || file.Length == 0)
+                return BadRequest("Arquivo não fornecido ou vazio.");
+
+            try
             {
-                return BadRequest("Code da empresa não informado.");
+                using (var stream = new MemoryStream())
+                {
+                    await file.CopyToAsync(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    var SiteId = userInfo.SiteID;
+
+                    if (SiteId <= 0)
+                        return BadRequest("ID da empresa não disponível no contexto.");
+
+                    var response = await business.SyncByFileAsync(stream, electionId);
+
+                    if (response.HasErrors)
+                        return BadRequest(response.Messages);
+
+                    return Ok(response);
+                }
             }
-            if (file == null)
+            catch (Exception ex)
             {
-                return BadRequest("Chave File não informada.");
+                return StatusCode(500, new[] { $"Erro ao processar arquivo: {ex.Message}" });
             }
-
-            string companyCode;
-
-            using (var reader = new StreamReader(entry.OpenReadStream()))
-            {
-                var jsonContent = await reader.ReadToEndAsync();
-                var jsonDocument = JsonDocument.Parse(jsonContent);
-            }
-
-            var fileInMemory = new MemoryStream();
-            file.CopyTo(fileInMemory);
-            fileInMemory.Seek(0, SeekOrigin.Begin);
-
-            var response = await business.SyncByFileAsync(fileInMemory, electionId);
-
-            if (response.HasErrors)
-                return BadRequest(response.Messages);
-
-            return Ok();
         }
 
+        /// <summary>
+        /// Obtém o template para sincronização de eleitores
+        /// </summary>
+        /// <returns>Arquivo Excel com template</returns>
         [HttpGet("sync-template")]
         public ActionResult<byte[]> GetSyncTemplate()
         {
@@ -163,8 +146,5 @@ namespace TIVIT.CIPA.Api.Controllers
 
             return File(response.Data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SYNC-VOTER-TEMPLATE.xlsx");
         }
-
-
     }
 }
-

@@ -8,11 +8,10 @@
 
         public string[] Messages
         {
-            get
-            {
-                return _messages.ToArray();
-            }
+            get { return _messages.ToArray(); }
         }
+
+        public int Data { get; set; }
 
         public Response()
         {

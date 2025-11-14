@@ -5,7 +5,7 @@
         public int ElectionId { get; set; }
         public int SiteId { get; set; }
 
-        public Election Election { get; set; }
-        public Site Site { get; set; }
+        public virtual Election Election { get; set; }
+        public virtual Site Site { get; set; }
     }
 }
